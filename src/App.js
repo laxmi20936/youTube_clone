@@ -10,7 +10,7 @@ import MainContainer from "./components/MainContainer";
 function App() {
   return (
     <Provider store={store}>
-      <div className="App-container">
+      <div className="App-container relative">
         <Head />
         <Outlet />
       </div>

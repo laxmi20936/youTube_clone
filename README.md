@@ -104,7 +104,20 @@ cleanup
 display the suggestion
 onblur remove sugg
 
-cache data
+cache data:
+song : ["songs", "songs telugu", "songs tamil", "songs hindi", "songs kannada", "songs songs]
+
+iphone : ["iphone12","iphone11","iphone13","iphone12 pro max", ]
+
+iph : ["iphone12","iphone11","iphone13","iphone12 pro max", ]
+
+Cache_Results :
+{
+    "song" : ["songs", "songs hindi"],
+    "javascript": ["javascript mastery", "javascript array"],
+    iph : ["iphone12","iphone11","iphone13","iphone12 pro max", ]
+}
+
 
 comment
 =========================
