@@ -1,25 +1,26 @@
 import { toggleMenu } from "../utils/toggleMenuSlice";
-import { useDispatch , useSelector} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { addSearchSuggestion } from "../utils/searchSlice";
+import { useNavigate } from "react-router-dom";
 
 const Head = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const [focus, setFocus] = useState(false)
+  const [focus, setFocus] = useState(false);
   const dispatch = useDispatch();
-  const searchResult = useSelector(store => store?.searchCache?.data)
+  const searchResult = useSelector((store) => store?.searchCache?.data);
 
   useEffect(() => {
     let timer;
-    if(searchResult[searchQuery]){
-       setSuggestions(searchResult[searchQuery])
-
-    }else{
+    if (searchResult[searchQuery]) {
+      setSuggestions(searchResult[searchQuery]);
+    } else {
       timer = setTimeout(() => {
-      getData()
-    }, 200)
-  }
+        getData();
+      }, 200);
+    }
     return () => {
       console.log("laxmi hii");
       clearTimeout(timer);
@@ -34,13 +35,21 @@ const Head = () => {
     const json = await data1.json();
     console.log(json[1]);
     setSuggestions(json[1]);
-    dispatch(addSearchSuggestion({[searchQuery]: json[1]}))
+    dispatch(addSearchSuggestion({ [searchQuery]: json[1] }));
   };
 
   const toggleHandler = () => {
     dispatch(toggleMenu());
   };
+  const navFn = (suggestion) => {
+    navigate("/results?search_query=" + suggestion.replaceAll(" ", "+"));
+  };
 
+  const submitHandler = (e) => {
+    e.preventDefault();
+    navFn(searchQuery);
+    setFocus(false)
+  };
   return (
     <div className="head grid grid-flow-col p-5 shadow-lg w-full fixed z-10 bg-white">
       <div className="col-span-1 flex">
@@ -57,29 +66,59 @@ const Head = () => {
         />
       </div>
       <div className="col-span-10 ml-20">
-        <div>
+        <form onSubmit={(e) => submitHandler(e)}>
           <input
             className="border border-slate-900 w-1/2 rounded-l-full p-2 px-4"
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={()=> setFocus(true)}
-            onBlur={()=> setFocus(false)}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              setFocus(true)
+            }}
+            onFocus={() => setFocus(true)}
+            onBlur={() => setFocus(false)}
+            // onBlur={() =>
+            //   setTimeout(() => {
+            //     setFocus(false);
+            //   }, 100)
+            // }
           />
           <button className="border border-slate-900 rounded-r-full p-2 cursor-pointer">
             🔍
           </button>
-        </div>
+        </form>
+        {/* <form onSubmit={(e) => e.preventDefault()}>
+          <input
+            type="text"
+            value={searchQuery1}
+            onChange={(e) => setSearchQuery1(e.target.value)}
+          />
+          <button>click</button>
+        </form> */}
 
-        {focus && (suggestions.length > 0) && <div className="border border-gray-50 
-        rounded-md shadow-md w-[33rem] mt-1 fixed bg-slate-50 top-16">
-          {suggestions.map((suggestion, index) => (
-            <div className="px-2 hover:bg-slate-200 py-2" key={index}>
-              <span className="mr-3">🔍</span>
-              <span>{suggestion}</span>
-            </div>
-          ))}
-        </div>}
+        {focus && suggestions.length > 0 && (
+          <div
+            className="border border-gray-50 
+        rounded-md shadow-md w-[33rem] mt-1 fixed bg-slate-50 top-16"
+          >
+            {suggestions.map((suggestion, index) => (
+              <div
+                className="px-2 hover:bg-slate-200 py-2"
+                key={index}
+                onMouseDown={() => {
+                  setSearchQuery(suggestion);
+                  navFn(suggestion);
+                  // navigate(
+                  //   "/results?search_query=" + suggestion.replaceAll(" ", "+")
+                  // );
+                }}
+              >
+                <span className="mr-3">🔍</span>
+                <span>{suggestion}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="col-span-1 flex justify-end">
         <img
