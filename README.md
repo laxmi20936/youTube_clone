@@ -118,8 +118,19 @@ Cache_Results :
     iph : ["iphone12","iphone11","iphone13","iphone12 pro max", ]
 }
 
+Reddit nested comment
+Youtube 2 level nested commeny
+single comment: {name: "laxmi",
+                 desc: "wow",
+                 reply:[{name: "xyz",
+                 desc:"kk",
+                 reply:[]
 
-comment
+                 },{
+
+                 }]
+                }
+
 =========================
 search with Debouncing, optimising the search
 API calls optimisation

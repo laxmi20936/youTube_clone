@@ -8,7 +8,7 @@ const Body = () => {
   // },[])
 
   return (
-    <div className="body flex absolute top-[85px]">
+    <div className="body flex absolute top-[85px] w-full">
       {/* {console.log("Body called")} */}
       <SideBar />
       <Outlet />
